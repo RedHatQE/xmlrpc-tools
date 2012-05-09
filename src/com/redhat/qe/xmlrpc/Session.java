@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.httpclient.Credentials;
@@ -36,6 +37,7 @@ public class Session {
 	protected String password;
 	protected URL url;
 	protected static XmlRpcClient client = null;
+	protected Integer userid;
 
 	public Session(String userName, String password, URL url) {
 		this.userName = userName;
@@ -99,6 +101,40 @@ public class Session {
 		return client;
 	}
 
+	public Object login() throws XmlRpcException, GeneralSecurityException,
+	IOException {
+		return login("Auth.login", "login", userName, "password", password,
+		"id");
+	}
+
+	public Object login(String loginMethod, String loginKey, String login,
+		String passKey, String password, String returnKey)
+		throws XmlRpcException, GeneralSecurityException, IOException {
+	init();
+	HashMap<String, Object> map = new HashMap<String, Object>();
+	map.put(loginKey, login);
+	map.put(passKey, password);
+	ArrayList<Object> params = new ArrayList<Object>();
+	params.add(map);
+	
+	HashMap<String, Object> hash = (HashMap<String, Object>) client
+			.execute(loginMethod, params);
+	this.userid = (Integer) hash.get(returnKey);
+	return hash;
+	
+	}
+	
+	/**
+	* @return the userid
+	*/
+	public Integer getUserid() {
+	return userid;
+	}
+
+	public void setUserid(Integer userid) {
+	this.userid = userid;
+	}
+				
 	public class MyTypeFactory extends TypeFactoryImpl {
 
 		public MyTypeFactory(XmlRpcController pController) {
