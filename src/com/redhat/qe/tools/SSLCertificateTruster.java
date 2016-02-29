@@ -35,7 +35,7 @@ public class SSLCertificateTruster {
 	         put( "TrustManagerFactory.TrustAllCertificates",
 	            MyTrustManagerFactory.class.getName() );
 	      }
-	      protected static class MyTrustManagerFactory
+	      public static class MyTrustManagerFactory
 	            extends TrustManagerFactorySpi {
 	         public MyTrustManagerFactory() {}
 	         protected void engineInit( KeyStore keystore ) {}
@@ -47,7 +47,7 @@ public class SSLCertificateTruster {
 	            };
 	         }
 	      }
-	      protected static class MyX509TrustManager
+	      public static class MyX509TrustManager
 	            implements X509TrustManager {
 	         public void checkClientTrusted(
 	            X509Certificate[] chain, String authType) {}
